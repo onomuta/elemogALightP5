@@ -1,7 +1,14 @@
-import oscP5.*;
-import netP5.*;
-OscP5 oscP5;
+PGraphics main;
+PGraphics top;
+
 OPC opc;
+Scene1 scene1;
+Scene2 scene2;
+Scene3 scene3;
+Scene4 scene4;
+Scene5 scene5;
+Scene6 scene6;
+Scene7 scene7;
 
 import themidibus.*;
 MidiBus myBus; 
@@ -13,20 +20,34 @@ float[] colY = new float[num];
 float[] colYSpeed = new float[num];
 int scene;
 
+int btnCount = 0;
+
 void setup(){
-  frameRate(60);
-  oscP5 = new OscP5(this,8000);
+  colorMode(HSB,1);
   size(128,128);
-  opcSetup();
-  
+  frameRate(60);
 
   MidiBus.list();
-  myBus = new MidiBus(this, "TouchOSC Bridge", -1);
+  //myBus = new MidiBus(this, "TouchOSC Bridge", -1);
+  myBus = new MidiBus(this, 0, -1);
   colW = width/8;
   noStroke();
   for(int i = 0 ; i < num ; i++) {
     colYSpeed[i] = random(15)+15;
   };
+  
+  
+  main= createGraphics(width, height/2);
+  main.noStroke();
+  main.colorMode(HSB,1);
+  top= createGraphics(width, height/2);
+  top.noStroke();
+  top.colorMode(HSB,1);
+  
+  scene1 = new Scene1();
+  scene2 = new Scene2();
+  scene3 = new Scene3();
+  scene4 = new Scene4();
 };
 
 int count = 0;
@@ -36,80 +57,64 @@ int push = 0;
 boolean piano = false;
 int pianoPos = 0;
 
+//todo : currentSceneを作成してsceneのinitを呼び出す
 
 void draw(){
   background(0);
-  
+  //fill(cc[0]/127.,1,1);
   println("piano"+piano + "/pos" +pianoPos);
   if(piano == true){
     
     rect(pianoPos, 0 , 20 , height);
   };
   if(scene == 1){
-    scene1();
-  }else if(scene == 2){
-    scene2();
-  }else if(scene == 3){
-    scene3();
-  }else if(scene == 4){
-    //scene4();
-  }else if(scene == 5){
+    scene1.init();
+    scene1.run();
+  }else if(scene==2){
+    scene2.disp();
+  }else if(scene==3){
+    scene3.run();
+  }else if(scene==4){
+    scene4.init();
+    scene4.run();
+  }else if(scene==5){
     //scene5();
   };
-};
-
-void scene1(){
-  for(int i = 0; i < num; i++){
-    if(colY[i] < 0 - colH){
-      colYSpeed[i] = random(15)+10;
-      colY[i] = height + colH;
-    }
-    colY[i] = colY[i] - colYSpeed[i];
-    rect(colW * i, colY[i],colW,colH);
-  };
-};
-
-void scene2(){
-  if(colY[0] < 0 - 20){
-    colY[0] = height + 20;
-  }
-  colY[0] = colY[0] - 10;
-  rect(0, colY[0], width, 20);
-};
-
-void scene3(){
-  if(colY[0] < 0 - 20){
-    colY[0] = width + 20;
-  }
-  colY[0] = colY[0] - 10;
-  rect(colY[0], 0, 20, height);
-};
-
-
-void keyPressed() {
-  if(key == 'a'){
-    scene = 1;
-  }else if(key == 's'){
-    scene = 2;
-  }else if(key == 'd'){
-    scene = 3;
-  }else if(key == 'f'){
-    scene = 4;
-  }else if(key == 'g'){
-    scene = 5;
-  }else if(key == 'h'){
-    scene = 6;
-  }else if(key == 'j'){
-    scene = 7;
-  }else if(key == 'k'){
-    scene = 8;
-  }
   
-}
+  //cScene = scene; 
+  
+  for(int i = 0; i < cc.length; i++){
+    //println("CC"+ i + cc[i]);
+    print(nf(i,3) + " | ");
+  } 
+  println();
+  for(int i = 0; i < cc.length; i++){
+    print(nf(cc[i],3) + " | ");
+  } 
+  println();
+  
+  
+  
+  for(int i = 0; i < ccCount; i ++){
+    if(ccS[i] != cc[i]){
+      ccS[i] = cc[i];
+      if(cc[i] > 0){
+        scene = i ;
+      };
+    };
+    
+    btnCount += cc[i];
+  };
+   if(btnCount == 0){
+     scene = 0 ;
+   }else{
+     btnCount = 0;
+   }
+    
+    println(scene);
+    
+};
 
-void keyReleased(){
-  scene = 0;
-}
 
 void opcSetup(){
   opc = new OPC(this, "127.0.0.1", 7890);
@@ -133,15 +138,15 @@ void opcSetup(){
   
 };
 
+int midiNum;
+int midiVal;
+int midiCh;
+
+int ccCount = 16;   //cc使用する数
+int[] cc  = new int[ccCount];
+int[] ccS  = new int[ccCount];
+
 void controllerChange(int channel, int number, int value) {
-  // Receive a controllerChange
-  //println();
-  //println("Controller Change:");
-  //println("--------");
-  //println("Channel:"+channel);
-  //println("Number:"+number);
-  //println("Value:"+value);
-  
   push = value;
   if(number == 13 && value == 127){
     piano = true;
@@ -149,7 +154,9 @@ void controllerChange(int channel, int number, int value) {
     piano = false;
   }
   
-  if(number == 0){
-    pianoPos = 127-value;
-  };
-}
+  for(int i = 0; i < cc.length; i++){
+    if(i == number){
+      cc[i] = value;
+    }
+  } 
+};
