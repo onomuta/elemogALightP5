@@ -1,3 +1,8 @@
+import oscP5.*;
+import netP5.*;
+OscP5 oscP5; 
+NetAddress myRemoteLocation;    //送信用のアドレスを保持する変数
+
 PGraphics main;
 PGraphics top;
 
@@ -10,8 +15,10 @@ Scene5 scene5;
 Scene6 scene6;
 Scene7 scene7;
 
-import themidibus.*;
-MidiBus myBus; 
+//シーン切り替え
+int sceneCount = 9;
+float[] sceneBtn  = new float[sceneCount];
+float[] currentSceneBtn  = new float[sceneCount];
 
 float colW;
 int num = 8;
@@ -27,9 +34,12 @@ void setup(){
   size(128,128);
   frameRate(60);
 
-  MidiBus.list();
-  //myBus = new MidiBus(this, "TouchOSC Bridge", -1);
-  myBus = new MidiBus(this, 0, -1);
+
+  //受信用の変数。右の数字はポート番号。送信側のポート番号とあわせる。
+  oscP5 = new OscP5(this,8000);
+  //送信用オブジェクト。左側の数字が相手のIPアドレス、右側が相手のポート番号。
+  myRemoteLocation = new NetAddress("127.0.0.1", 9000);
+  
   colW = width/8;
   noStroke();
   for(int i = 0 ; i < num ; i++) {
@@ -48,14 +58,18 @@ void setup(){
   scene2 = new Scene2();
   scene3 = new Scene3();
   scene4 = new Scene4();
+  scene5 = new Scene5();
+  scene6 = new Scene6();
+  scene7 = new Scene7();
 };
 
 int count = 0;
 int push = 0;
 
 
-boolean piano = false;
-int pianoPos = 0;
+int piano = 0;
+float pianoPos = 0;
+int currentScene = 0;
 
 //todo : currentSceneを作成してsceneのinitを呼び出す
 
@@ -63,58 +77,101 @@ void draw(){
   background(0);
   //fill(cc[0]/127.,1,1);
   println("piano"+piano + "/pos" +pianoPos);
-  if(piano == true){
-    
-    rect(pianoPos, 0 , 20 , height);
+  if(piano == 1){
+    rect(pianoPos * width - 10, 0 , 20 , height);
   };
   if(scene == 1){
-    scene1.init();
+    if(currentScene != scene){
+      scene1.init();
+      currentScene = scene;
+    };
     scene1.run();
   }else if(scene==2){
-    scene2.disp();
+    if(currentScene != scene){
+      scene2.init();
+      currentScene = scene;
+    };
+    scene2.run();
   }else if(scene==3){
+    if(currentScene != scene){
+      scene3.init();
+      currentScene = scene;
+    };
     scene3.run();
   }else if(scene==4){
-    scene4.init();
+    if(currentScene != scene){
+      scene4.init();
+      currentScene = scene;
+    };
     scene4.run();
   }else if(scene==5){
-    //scene5();
+    if(currentScene != scene){
+      scene5.init();
+      currentScene = scene;
+    };
+    scene5.run();
   };
   
-  //cScene = scene; 
-  
-  for(int i = 0; i < cc.length; i++){
-    //println("CC"+ i + cc[i]);
-    print(nf(i,3) + " | ");
-  } 
-  println();
-  for(int i = 0; i < cc.length; i++){
-    print(nf(cc[i],3) + " | ");
-  } 
-  println();
-  
-  
-  
-  for(int i = 0; i < ccCount; i ++){
-    if(ccS[i] != cc[i]){
-      ccS[i] = cc[i];
-      if(cc[i] > 0){
-        scene = i ;
+  //for(int i = 0; i < sceneBtn.length; i++){
+  //  print(nf(i + 1,2) + " | ");
+  //} ;
+  //println();
+  //for(int i = 0; i < sceneBtn.length; i++){
+  //  print(nf(sceneBtn[i],2,0) + " | ");
+  //} ;
+  //println();
+  for(int i = 0; i < sceneCount; i ++){
+    if(currentSceneBtn[i] != sceneBtn[i]){
+      currentSceneBtn[i] = sceneBtn[i];
+      if(sceneBtn[i] > 0){
+        scene = i +1 ;
       };
     };
-    
-    btnCount += cc[i];
+    btnCount += sceneBtn[i];
   };
    if(btnCount == 0){
      scene = 0 ;
    }else{
      btnCount = 0;
    }
-    
-    println(scene);
+    println("Scene : "+scene);
     
 };
 
+
+
+
+
+
+
+//OSCメッセージを受信した際に実行するイベント
+void oscEvent(OscMessage msg) {
+  
+  if(msg.checkAddrPattern("/scene1")==true) {
+    sceneBtn[0] = msg.get(0).floatValue();
+  }else if(msg.checkAddrPattern("/scene2")==true) {
+    sceneBtn[1] = msg.get(0).floatValue();
+  }else if(msg.checkAddrPattern("/scene3")==true) {
+    sceneBtn[2] = msg.get(0).floatValue();
+  }else if(msg.checkAddrPattern("/scene4")==true) {
+    sceneBtn[3] = msg.get(0).floatValue();
+  }else if(msg.checkAddrPattern("/scene5")==true) {
+    sceneBtn[4] = msg.get(0).floatValue();
+  }else if(msg.checkAddrPattern("/scene6")==true) {
+    sceneBtn[5] = msg.get(0).floatValue();
+  }else if(msg.checkAddrPattern("/scene7")==true) {
+    sceneBtn[6] = msg.get(0).floatValue();
+  }else if(msg.checkAddrPattern("/scene8")==true) {
+    sceneBtn[7] = msg.get(0).floatValue();
+  }else if(msg.checkAddrPattern("/scene9")==true) {
+    sceneBtn[8] = msg.get(0).floatValue();
+  }else if(msg.checkAddrPattern("/fader1")==true) {
+    pianoPos = msg.get(0).floatValue();
+  }else if(msg.checkAddrPattern("/fader1/z")==true) {
+    piano = int(msg.get(0).floatValue());
+    println(piano);
+  };
+};
 
 void opcSetup(){
   opc = new OPC(this, "127.0.0.1", 7890);
@@ -135,28 +192,4 @@ void opcSetup(){
   opc.ledStrip(13 * 64, 60, width * 1/4, height * 3/8 - height * 1/16, height/60/2, radians(180), false);
   opc.ledStrip(14 * 64, 60, width * 3/4, height * 4/8 - height * 1/16, height/60/2, radians(0), false);
   opc.ledStrip(15 * 64, 60, width * 1/4, height * 4/8 - height * 1/16, height/60/2, radians(180), false);
-  
-};
-
-int midiNum;
-int midiVal;
-int midiCh;
-
-int ccCount = 16;   //cc使用する数
-int[] cc  = new int[ccCount];
-int[] ccS  = new int[ccCount];
-
-void controllerChange(int channel, int number, int value) {
-  push = value;
-  if(number == 13 && value == 127){
-    piano = true;
-  }else if(number == 13 && value == 0){
-    piano = false;
-  }
-  
-  for(int i = 0; i < cc.length; i++){
-    if(i == number){
-      cc[i] = value;
-    }
-  } 
 };

@@ -1,5 +1,8 @@
 class Scene2 {
-  void disp() {
+  void init() {
+    fill(1);
+  };
+  void run() {
      if(colY[0] < 0 - 20){
       colY[0] = height + 20;
     }
