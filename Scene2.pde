@@ -1,6 +1,7 @@
 class Scene2 {
   void init() {
-    fill(1);
+    noStroke();
+    fill(baseColor[0],baseColor[1],baseColor[2]);
   };
   void run() {
      if(colY[0] < 0 - 20){

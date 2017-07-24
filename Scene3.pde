@@ -1,6 +1,13 @@
 class Scene3 {
   void init() {
-    fill(1);
+    main.beginDraw();
+    main.fill(baseColor[0],baseColor[1],baseColor[2]);
+    main.noStroke();
+    main.endDraw();
+    top.beginDraw();
+    top.fill(baseColor[0],baseColor[1],baseColor[2]);
+    top.noStroke();
+    top.endDraw();
   };
   void run() {
     main.beginDraw();

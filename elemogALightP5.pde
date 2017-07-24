@@ -14,6 +14,8 @@ Scene4 scene4;
 Scene5 scene5;
 Scene6 scene6;
 Scene7 scene7;
+Scene8 scene8;
+Scene9 scene9;
 
 //シーン切り替え
 int sceneCount = 9;
@@ -25,6 +27,8 @@ int num = 8;
 float colH = 20;
 float[] colY = new float[num];
 float[] colYSpeed = new float[num];
+
+float[] baseColor ={0.5,1,1};
 int scene;
 
 int btnCount = 0;
@@ -46,13 +50,19 @@ void setup(){
     colYSpeed[i] = random(15)+15;
   };
   
-  
+  noStroke();
+  colorMode(HSB,1);
   main= createGraphics(width, height/2);
+  main.beginDraw();
   main.noStroke();
   main.colorMode(HSB,1);
+  main.endDraw();
+
   top= createGraphics(width, height/2);
+  top.beginDraw();
   top.noStroke();
   top.colorMode(HSB,1);
+  top.endDraw();
   
   scene1 = new Scene1();
   scene2 = new Scene2();
@@ -61,6 +71,8 @@ void setup(){
   scene5 = new Scene5();
   scene6 = new Scene6();
   scene7 = new Scene7();
+  scene8 = new Scene8();
+  scene9 = new Scene9();
 };
 
 int count = 0;
@@ -83,35 +95,58 @@ void draw(){
   if(scene == 1){
     if(currentScene != scene){
       scene1.init();
-      currentScene = scene;
-    };
-    scene1.run();
+    };    scene1.run();
   }else if(scene==2){
     if(currentScene != scene){
       scene2.init();
-      currentScene = scene;
     };
     scene2.run();
   }else if(scene==3){
     if(currentScene != scene){
       scene3.init();
-      currentScene = scene;
+      println("init: mmmmmmmmmmmmmmmmmmmmmmmm");
     };
     scene3.run();
   }else if(scene==4){
     if(currentScene != scene){
       scene4.init();
-      currentScene = scene;
     };
     scene4.run();
   }else if(scene==5){
     if(currentScene != scene){
       scene5.init();
-      currentScene = scene;
     };
     scene5.run();
+  }else if(scene==6){
+    if(currentScene != scene){
+      scene6.init();
+    };
+    scene6.run();
+  }else if(scene==7){
+    if(currentScene != scene){
+      scene7.init();
+    };
+    scene7.run();
+  }else if(scene==8){
+    if(currentScene != scene){
+      scene8.init();
+    };
+    scene8.run();
+  }else if(scene==9){
+    if(currentScene != scene){
+      scene9.init();
+    };
+    scene9.run();
   };
   
+  
+  currentScene = scene;
+  sceneSelect();
+};
+
+
+
+void sceneSelect(){
   //for(int i = 0; i < sceneBtn.length; i++){
   //  print(nf(i + 1,2) + " | ");
   //} ;
@@ -129,24 +164,19 @@ void draw(){
     };
     btnCount += sceneBtn[i];
   };
-   if(btnCount == 0){
-     scene = 0 ;
-   }else{
-     btnCount = 0;
-   }
-    println("Scene : "+scene);
-    
+  if(btnCount == 0){
+    scene = 0 ;
+  }else{
+    btnCount = 0;
+  }
+  println("Scene : "+scene);
+  println(baseColor[0]);
 };
-
-
-
-
 
 
 
 //OSCメッセージを受信した際に実行するイベント
 void oscEvent(OscMessage msg) {
-  
   if(msg.checkAddrPattern("/scene1")==true) {
     sceneBtn[0] = msg.get(0).floatValue();
   }else if(msg.checkAddrPattern("/scene2")==true) {
@@ -171,6 +201,10 @@ void oscEvent(OscMessage msg) {
     piano = int(msg.get(0).floatValue());
     println(piano);
   };
+
+  if(msg.checkAddrPattern("/hue")==true) {
+    baseColor[0] = msg.get(0).floatValue();
+  }
 };
 
 void opcSetup(){
