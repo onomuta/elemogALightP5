@@ -1,15 +1,18 @@
 class Scene7 {
   void init() {
-    fill(1);
+    fill(baseColor[0],baseColor[1],baseColor[2]);
   };
   void run() {
-    for(int i = 0; i < num; i++){
-      if(colY[i] < 0 - colH){
-        colYSpeed[i] = random(15)+10;
-        colY[i] = height + colH;
-      }
-      colY[i] = colY[i] - colYSpeed[i];
-      rect(colW * i, colY[i],colW,colH);
-    };
+    
+    translate(width/2, height/2);
+    translate(0, main.height/2);
+    
+    rotate(radians(frameCount *4));
+    rect(-width,-3,2*width,6);
+    rotate(radians(60));
+    rect(-width,-3,2*width,6);
+    rotate(radians(60));
+    rect(-width,-3,2*width,6);
+    
   };
 }

@@ -1,4 +1,7 @@
 class Scene2 {
+  int num = 8;
+  float colH = 20;
+  float[] colY = new float[num];
   void init() {
     noStroke();
     fill(baseColor[0],baseColor[1],baseColor[2]);

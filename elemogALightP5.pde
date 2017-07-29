@@ -22,18 +22,13 @@ int sceneCount = 9;
 float[] sceneBtn  = new float[sceneCount];
 float[] currentSceneBtn  = new float[sceneCount];
 
-float colW;
-int num = 8;
-float colH = 20;
-float[] colY = new float[num];
-float[] colYSpeed = new float[num];
-
 float[] baseColor ={0.5,1,1};
 int scene;
 
 int btnCount = 0;
 
 void setup(){
+  blendMode(ADD);
   colorMode(HSB,1);
   size(128,128);
   frameRate(60);
@@ -44,11 +39,6 @@ void setup(){
   //送信用オブジェクト。左側の数字が相手のIPアドレス、右側が相手のポート番号。
   myRemoteLocation = new NetAddress("127.0.0.1", 9000);
   
-  colW = width/8;
-  noStroke();
-  for(int i = 0 ; i < num ; i++) {
-    colYSpeed[i] = random(15)+15;
-  };
   
   noStroke();
   colorMode(HSB,1);
@@ -83,7 +73,6 @@ int piano = 0;
 float pianoPos = 0;
 int currentScene = 0;
 
-//todo : currentSceneを作成してsceneのinitを呼び出す
 
 void draw(){
   background(0);
@@ -104,7 +93,6 @@ void draw(){
   }else if(scene==3){
     if(currentScene != scene){
       scene3.init();
-      println("init: mmmmmmmmmmmmmmmmmmmmmmmm");
     };
     scene3.run();
   }else if(scene==4){
@@ -165,7 +153,7 @@ void sceneSelect(){
     btnCount += sceneBtn[i];
   };
   if(btnCount == 0){
-    scene = 0 ;
+    scene = md%10 ;
   }else{
     btnCount = 0;
   }
@@ -173,7 +161,12 @@ void sceneSelect(){
   println(baseColor[0]);
 };
 
-
+int md = 0;
+  
+  void mouseClicked(){
+    md ++;
+    println(md);
+  }
 
 //OSCメッセージを受信した際に実行するイベント
 void oscEvent(OscMessage msg) {

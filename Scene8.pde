@@ -1,15 +1,20 @@
 class Scene8 {
   void init() {
-    fill(1);
+    fill(baseColor[0],baseColor[1],baseColor[2]);
+    noStroke();
   };
+  
+  int count = 0;
+  
   void run() {
-    for(int i = 0; i < num; i++){
-      if(colY[i] < 0 - colH){
-        colYSpeed[i] = random(15)+10;
-        colY[i] = height + colH;
-      }
-      colY[i] = colY[i] - colYSpeed[i];
-      rect(colW * i, colY[i],colW,colH);
-    };
+    
+    if(count/4 %2 == 0){
+      fill(baseColor[0],baseColor[1],baseColor[2]);
+    }else{
+      fill(0);
+    }
+    
+    rect(0,0,width, height);
+    count ++;
   };
 }
