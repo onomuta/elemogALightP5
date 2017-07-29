@@ -27,19 +27,22 @@ int scene;
 
 int btnCount = 0;
 
+float colorR = 0;
+float colorG = 0;
+float colorB = 0;
+
 void setup(){
+  opcSetup();
   blendMode(ADD);
   colorMode(HSB,1);
   size(128,128);
   frameRate(60);
 
-
   //受信用の変数。右の数字はポート番号。送信側のポート番号とあわせる。
   oscP5 = new OscP5(this,8000);
   //送信用オブジェクト。左側の数字が相手のIPアドレス、右側が相手のポート番号。
   myRemoteLocation = new NetAddress("127.0.0.1", 9000);
-  
-  
+    
   noStroke();
   colorMode(HSB,1);
   main= createGraphics(width, height/2);
@@ -68,16 +71,50 @@ void setup(){
 int count = 0;
 int push = 0;
 
-
 int piano = 0;
 float pianoPos = 0;
 int currentScene = 0;
 
-
 void draw(){
+  
+  if(colorR == 1 && colorG == 1 && colorB == 1){
+    baseColor[0] = 1;
+    baseColor[1] = 0;
+    baseColor[2] = 1;
+  }else if(colorR == 0 && colorG == 0 && colorB == 0){
+    baseColor[0] = 1;
+    baseColor[1] = 0;
+    baseColor[2] = 1;
+  }else if(colorR == 1 && colorG == 0 && colorB == 0){
+    baseColor[0] = 0;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }else if(colorR == 1 && colorG == 1 && colorB == 0){
+    baseColor[0] = 0.15;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }else if(colorR == 0 && colorG == 1 && colorB == 0){
+    baseColor[0] = 0.3;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }else if(colorR == 0 && colorG == 1 && colorB == 1){
+    baseColor[0] = 0.5;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }else if(colorR == 0 && colorG == 0 && colorB == 1){
+    baseColor[0] = 0.65;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }else if(colorR == 1 && colorG == 0 && colorB == 1){
+    baseColor[0] = 0.9;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }
+  
+  
   background(0);
   //fill(cc[0]/127.,1,1);
-  println("piano"+piano + "/pos" +pianoPos);
+  //println("piano"+piano + "/pos" +pianoPos);
   if(piano == 1){
     rect(pianoPos * width - 10, 0 , 20 , height);
   };
@@ -127,11 +164,9 @@ void draw(){
     scene9.run();
   };
   
-  
   currentScene = scene;
   sceneSelect();
 };
-
 
 
 void sceneSelect(){
@@ -153,19 +188,19 @@ void sceneSelect(){
     btnCount += sceneBtn[i];
   };
   if(btnCount == 0){
-    scene = md%10 ;
+    scene = 0 ;
   }else{
     btnCount = 0;
   }
-  println("Scene : "+scene);
-  println(baseColor[0]);
+  //println("Scene : "+scene);
+  //println(baseColor[0]);
 };
 
 int md = 0;
   
   void mouseClicked(){
     md ++;
-    println(md);
+    //println(md);
   }
 
 //OSCメッセージを受信した際に実行するイベント
@@ -192,7 +227,13 @@ void oscEvent(OscMessage msg) {
     pianoPos = msg.get(0).floatValue();
   }else if(msg.checkAddrPattern("/fader1/z")==true) {
     piano = int(msg.get(0).floatValue());
-    println(piano);
+    //println(piano);
+  }else if(msg.checkAddrPattern("/r")==true) {
+    colorR = msg.get(0).floatValue();
+  }else if(msg.checkAddrPattern("/g")==true) {
+    colorG = msg.get(0).floatValue();
+  }else if(msg.checkAddrPattern("/b")==true) {
+    colorB = msg.get(0).floatValue();
   };
 
   if(msg.checkAddrPattern("/hue")==true) {
