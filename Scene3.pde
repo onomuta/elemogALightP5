@@ -12,11 +12,13 @@ class Scene3 {
   void run() {
     main.beginDraw();
     main.background(0);
+    main.fill((baseColor[0]+ random(0.15)) % 1,baseColor[1],baseColor[2]);
     main.rect(frameCount * 4 % (width + 20 )- 10, 0, 20, height);
     main.endDraw();
    
     top.beginDraw();
     top.background(0);
+    top.fill((baseColor[0]+ random(0.15)) % 1,baseColor[1],baseColor[2]);
     top.rect(width - frameCount * 4 % (width + 20 )- 10, 0, 20, height);
     top.endDraw();
     image(main,0,height/2);

@@ -76,46 +76,13 @@ float pianoPos = 0;
 int currentScene = 0;
 
 void draw(){
-  
-  if(colorR == 1 && colorG == 1 && colorB == 1){
-    baseColor[0] = 1;
-    baseColor[1] = 0;
-    baseColor[2] = 1;
-  }else if(colorR == 0 && colorG == 0 && colorB == 0){
-    baseColor[0] = 1;
-    baseColor[1] = 0;
-    baseColor[2] = 1;
-  }else if(colorR == 1 && colorG == 0 && colorB == 0){
-    baseColor[0] = 0;
-    baseColor[1] = 1;
-    baseColor[2] = 1;
-  }else if(colorR == 1 && colorG == 1 && colorB == 0){
-    baseColor[0] = 0.15;
-    baseColor[1] = 1;
-    baseColor[2] = 1;
-  }else if(colorR == 0 && colorG == 1 && colorB == 0){
-    baseColor[0] = 0.3;
-    baseColor[1] = 1;
-    baseColor[2] = 1;
-  }else if(colorR == 0 && colorG == 1 && colorB == 1){
-    baseColor[0] = 0.5;
-    baseColor[1] = 1;
-    baseColor[2] = 1;
-  }else if(colorR == 0 && colorG == 0 && colorB == 1){
-    baseColor[0] = 0.65;
-    baseColor[1] = 1;
-    baseColor[2] = 1;
-  }else if(colorR == 1 && colorG == 0 && colorB == 1){
-    baseColor[0] = 0.9;
-    baseColor[1] = 1;
-    baseColor[2] = 1;
-  }
-  
+  colorSelector();
   
   background(0);
   //fill(cc[0]/127.,1,1);
   //println("piano"+piano + "/pos" +pianoPos);
   if(piano == 1){
+    fill(baseColor[0],baseColor[1],baseColor[2]);
     rect(pianoPos * width - 10, 0 , 20 , height);
   };
   if(scene == 1){
@@ -188,7 +155,7 @@ void sceneSelect(){
     btnCount += sceneBtn[i];
   };
   if(btnCount == 0){
-    scene = 0 ;
+    scene = 9 ;     //////////////////////////////////////////////////test Scene
   }else{
     btnCount = 0;
   }
@@ -260,4 +227,40 @@ void opcSetup(){
   opc.ledStrip(13 * 64, 60, width * 1/4, height * 3/8 - height * 1/16, height/60/2, radians(180), false);
   opc.ledStrip(14 * 64, 60, width * 3/4, height * 4/8 - height * 1/16, height/60/2, radians(0), false);
   opc.ledStrip(15 * 64, 60, width * 1/4, height * 4/8 - height * 1/16, height/60/2, radians(180), false);
+};
+
+void colorSelector(){
+  if(colorR == 1 && colorG == 1 && colorB == 1){
+    baseColor[0] = 1;
+    baseColor[1] = 0;
+    baseColor[2] = 1;
+  }else if(colorR == 0 && colorG == 0 && colorB == 0){
+    baseColor[0] = 1;
+    baseColor[1] = 0;
+    baseColor[2] = 1;
+  }else if(colorR == 1 && colorG == 0 && colorB == 0){
+    baseColor[0] = 0;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }else if(colorR == 1 && colorG == 1 && colorB == 0){
+    baseColor[0] = 0.15;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }else if(colorR == 0 && colorG == 1 && colorB == 0){
+    baseColor[0] = 0.3;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }else if(colorR == 0 && colorG == 1 && colorB == 1){
+    baseColor[0] = 0.5;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }else if(colorR == 0 && colorG == 0 && colorB == 1){
+    baseColor[0] = 0.65;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }else if(colorR == 1 && colorG == 0 && colorB == 1){
+    baseColor[0] = 0.9;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }
 };
