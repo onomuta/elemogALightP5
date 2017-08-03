@@ -42,7 +42,7 @@ void setup(){
   oscP5 = new OscP5(this,8000);
   //送信用オブジェクト。左側の数字が相手のIPアドレス、右側が相手のポート番号。
   myRemoteLocation = new NetAddress("127.0.0.1", 9000);
-    
+
   noStroke();
   colorMode(HSB,1);
   main= createGraphics(width, height/2);
@@ -56,7 +56,7 @@ void setup(){
   top.noStroke();
   top.colorMode(HSB,1);
   top.endDraw();
-  
+
   scene1 = new Scene1();
   scene2 = new Scene2();
   scene3 = new Scene3();
@@ -77,7 +77,7 @@ int currentScene = 0;
 
 void draw(){
   colorSelector();
-  
+
   background(0);
   //fill(cc[0]/127.,1,1);
   //println("piano"+piano + "/pos" +pianoPos);
@@ -130,7 +130,7 @@ void draw(){
     };
     scene9.run();
   };
-  
+
   currentScene = scene;
   sceneSelect();
 };
@@ -155,7 +155,7 @@ void sceneSelect(){
     btnCount += sceneBtn[i];
   };
   if(btnCount == 0){
-    scene = 9 ;     //////////////////////////////////////////////////test Scene
+    scene = md ;     //////////////////////////////////////////////////test Scene
   }else{
     btnCount = 0;
   }
@@ -164,9 +164,10 @@ void sceneSelect(){
 };
 
 int md = 0;
-  
+
   void mouseClicked(){
     md ++;
+    md = md % 10;
     //println(md);
   }
 
@@ -218,9 +219,9 @@ void opcSetup(){
   opc.ledStrip(5 * 64, 54, width * 6/8 - width/16, height * 3/4, height/54/2, radians(90), true);
   opc.ledStrip(6 * 64, 54, width * 7/8 - width/16, height * 3/4, height/54/2, radians(90), true);
   opc.ledStrip(7 * 64, 54, width * 8/8 - width/16, height * 3/4, height/54/2, radians(90), true);
-  
+
   opc.ledStrip(8 * 64, 60, width * 3/4, height * 1/8 - height * 1/16, height/60/2, radians(0), false);
-  opc.ledStrip(9 * 64, 60, width * 1/4, height * 1/8 - height * 1/16, height/60/2, radians(180), false); 
+  opc.ledStrip(9 * 64, 60, width * 1/4, height * 1/8 - height * 1/16, height/60/2, radians(180), false);
   opc.ledStrip(10 * 64, 60, width * 3/4, height * 2/8 - height * 1/16, height/60/2, radians(0), false);
   opc.ledStrip(11 * 64, 60, width * 1/4, height * 2/8 - height * 1/16, height/60/2, radians(180), false);
   opc.ledStrip(12 * 64, 60, width * 3/4, height * 3/8 - height * 1/16, height/60/2, radians(0), false);
@@ -264,3 +265,17 @@ void colorSelector(){
     baseColor[2] = 1;
   }
 };
+
+
+void keyPressed(){
+  if(key == 'r' || key == 'R'){
+    colorR ++;
+    colorR = colorR % 2;
+  }else if(key == 'g' || key == 'G'){
+    colorG ++;
+    colorG = colorG % 2;
+  }else if(key == 'b' || key == 'B'){
+    colorB ++;
+    colorB = colorB % 2;
+  }
+}
