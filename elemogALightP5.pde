@@ -16,9 +16,11 @@ Scene6 scene6;
 Scene7 scene7;
 Scene8 scene8;
 Scene9 scene9;
+Scene10 scene10;
+Scene11 scene11;
 
 //シーン切り替え
-int sceneCount = 9;
+int sceneCount = 11;
 float[] sceneBtn  = new float[sceneCount];
 float[] currentSceneBtn  = new float[sceneCount];
 
@@ -42,7 +44,7 @@ void setup(){
   oscP5 = new OscP5(this,8000);
   //送信用オブジェクト。左側の数字が相手のIPアドレス、右側が相手のポート番号。
   myRemoteLocation = new NetAddress("127.0.0.1", 9000);
-    
+
   noStroke();
   colorMode(HSB,1);
   main= createGraphics(width, height/2);
@@ -56,7 +58,7 @@ void setup(){
   top.noStroke();
   top.colorMode(HSB,1);
   top.endDraw();
-  
+
   scene1 = new Scene1();
   scene2 = new Scene2();
   scene3 = new Scene3();
@@ -66,6 +68,8 @@ void setup(){
   scene7 = new Scene7();
   scene8 = new Scene8();
   scene9 = new Scene9();
+  scene10 = new Scene10();
+  scene11 = new Scene11();
 };
 
 int count = 0;
@@ -76,46 +80,13 @@ float pianoPos = 0;
 int currentScene = 0;
 
 void draw(){
-  
-  if(colorR == 1 && colorG == 1 && colorB == 1){
-    baseColor[0] = 1;
-    baseColor[1] = 0;
-    baseColor[2] = 1;
-  }else if(colorR == 0 && colorG == 0 && colorB == 0){
-    baseColor[0] = 1;
-    baseColor[1] = 0;
-    baseColor[2] = 1;
-  }else if(colorR == 1 && colorG == 0 && colorB == 0){
-    baseColor[0] = 0;
-    baseColor[1] = 1;
-    baseColor[2] = 1;
-  }else if(colorR == 1 && colorG == 1 && colorB == 0){
-    baseColor[0] = 0.15;
-    baseColor[1] = 1;
-    baseColor[2] = 1;
-  }else if(colorR == 0 && colorG == 1 && colorB == 0){
-    baseColor[0] = 0.3;
-    baseColor[1] = 1;
-    baseColor[2] = 1;
-  }else if(colorR == 0 && colorG == 1 && colorB == 1){
-    baseColor[0] = 0.5;
-    baseColor[1] = 1;
-    baseColor[2] = 1;
-  }else if(colorR == 0 && colorG == 0 && colorB == 1){
-    baseColor[0] = 0.65;
-    baseColor[1] = 1;
-    baseColor[2] = 1;
-  }else if(colorR == 1 && colorG == 0 && colorB == 1){
-    baseColor[0] = 0.9;
-    baseColor[1] = 1;
-    baseColor[2] = 1;
-  }
-  
-  
+  colorSelector();
+
   background(0);
   //fill(cc[0]/127.,1,1);
   //println("piano"+piano + "/pos" +pianoPos);
   if(piano == 1){
+    fill(baseColor[0],baseColor[1],baseColor[2]);
     rect(pianoPos * width - 10, 0 , 20 , height);
   };
   if(scene == 1){
@@ -162,8 +133,18 @@ void draw(){
       scene9.init();
     };
     scene9.run();
+  }else if(scene==10){
+    if(currentScene != scene){
+      scene10.init();
+    };
+    scene10.run();
+  }else if(scene==11){
+    if(currentScene != scene){
+      scene11.init();
+    };
+    scene11.run();
   };
-  
+
   currentScene = scene;
   sceneSelect();
 };
@@ -188,7 +169,8 @@ void sceneSelect(){
     btnCount += sceneBtn[i];
   };
   if(btnCount == 0){
-    scene = 0 ;
+    scene = 10;
+    //scene = md ;     //////////////////////////////////////////////////test Scene
   }else{
     btnCount = 0;
   }
@@ -197,9 +179,10 @@ void sceneSelect(){
 };
 
 int md = 0;
-  
+
   void mouseClicked(){
     md ++;
+    md = md % 10;
     //println(md);
   }
 
