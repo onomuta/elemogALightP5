@@ -169,7 +169,7 @@ void sceneSelect(){
     btnCount += sceneBtn[i];
   };
   if(btnCount == 0){
-    scene = 10;
+    scene = 0;
     //scene = md ;     //////////////////////////////////////////////////test Scene
   }else{
     btnCount = 0;
@@ -182,7 +182,7 @@ int md = 0;
 
   void mouseClicked(){
     md ++;
-    md = md % 10;
+    md = md % sceneCount;
     //println(md);
   }
 
@@ -247,3 +247,55 @@ void opcSetup(){
   opc.ledStrip(14 * 64, 60, width * 1/4, height * 1/8 - height * 1/16, height/60/2, radians(0), false);
   opc.ledStrip(15 * 64, 60, width * 3/4, height * 1/8 - height * 1/16, height/60/2, radians(0), false);
 };
+
+
+void colorSelector(){
+  if(colorR == 1 && colorG == 1 && colorB == 1){
+    baseColor[0] = 1;
+    baseColor[1] = 0;
+    baseColor[2] = 1;
+  }else if(colorR == 0 && colorG == 0 && colorB == 0){
+    baseColor[0] = 1;
+    baseColor[1] = 0;
+    baseColor[2] = 1;
+  }else if(colorR == 1 && colorG == 0 && colorB == 0){
+    baseColor[0] = 0;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }else if(colorR == 1 && colorG == 1 && colorB == 0){
+    baseColor[0] = 0.15;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }else if(colorR == 0 && colorG == 1 && colorB == 0){
+    baseColor[0] = 0.3;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }else if(colorR == 0 && colorG == 1 && colorB == 1){
+    baseColor[0] = 0.5;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }else if(colorR == 0 && colorG == 0 && colorB == 1){
+    baseColor[0] = 0.65;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }else if(colorR == 1 && colorG == 0 && colorB == 1){
+    baseColor[0] = 0.85;
+    baseColor[1] = 1;
+    baseColor[2] = 1;
+  }
+};
+
+
+void keyPressed(){
+  if(key == 'r' || key == 'R'){
+    colorR ++;
+    colorR = colorR % 2;
+  }else if(key == 'g' || key == 'G'){
+    colorG ++;
+    colorG = colorG % 2;
+  }else if(key == 'b' || key == 'B'){
+    colorB ++;
+    colorB = colorB % 2;
+  }
+
+}
