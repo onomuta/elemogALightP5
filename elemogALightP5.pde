@@ -235,8 +235,8 @@ void opcSetup(){
   opc.ledStrip(6 * 64, 60, width * 7/8 - width/16, height * 3/4, height/54/2, radians(90), true);
   opc.ledStrip(7 * 64, 60, width * 8/8 - width/16, height * 3/4, height/54/2, radians(90), true);
   
-   opc.ledStrip(8 * 64, 60, width * 1/4, height * 4/8 - height * 1/16, height/60/2, radians(0), false); //left bottom
-  opc.ledStrip(9 * 64, 60, width * 3/4, height * 4/8 - height * 1/16, height/60/2, radians(0), false);
+  opc.ledStrip( 8 * 64, 60, width * 1/4, height * 4/8 - height * 1/16, height/60/2, radians(0), false); //left bottom?
+  opc.ledStrip( 9 * 64, 60, width * 3/4, height * 4/8 - height * 1/16, height/60/2, radians(0), false);
   
   opc.ledStrip(10 * 64, 60, width * 1/4, height * 3/8 - height * 1/16, height/60/2, radians(0), false);
   opc.ledStrip(11 * 64, 60, width * 3/4, height * 3/8 - height * 1/16, height/60/2, radians(0), false);
@@ -251,8 +251,8 @@ void opcSetup(){
 
 void colorSelector(){
   if(colorR == 1 && colorG == 1 && colorB == 1){
-    baseColor[0] = 1;
-    baseColor[1] = 0;
+    baseColor[0] = random(1);;
+    baseColor[1] = 1;
     baseColor[2] = 1;
   }else if(colorR == 0 && colorG == 0 && colorB == 0){
     baseColor[0] = 1;
